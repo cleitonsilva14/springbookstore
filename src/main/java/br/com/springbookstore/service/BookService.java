@@ -1,5 +1,6 @@
 package br.com.springbookstore.service;
 
+import br.com.springbookstore.exception.BookNotFoundException;
 import br.com.springbookstore.model.Book;
 import br.com.springbookstore.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,16 @@ public class BookService {
         return bookRepository.findAll();
     }
 
+
     public Book saveBook(Book book){
         return bookRepository.save(book);
     }
 
+    @Transactional(readOnly = true)
     public Optional<Book> findBookByUuid(UUID uuid){
+        if(!bookRepository.existsById(uuid)){
+            throw new BookNotFoundException(String.format("Book UUID={%s} não foi encontrado", uuid));
+        }
         return bookRepository.findById(uuid);
     }
 
