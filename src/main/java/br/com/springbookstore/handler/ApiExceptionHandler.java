@@ -23,7 +23,7 @@ public class ApiExceptionHandler {
                 .code(NOT_FOUND.value())
                 .status(NOT_FOUND.name())
                 .timestamp(LocalDateTime.now())
-                .errors(List.of(ex.getMessage()))
+                .messages(List.of(ex.getMessage()))
                 .build();
 
         return ResponseEntity.status(NOT_FOUND).body(error);

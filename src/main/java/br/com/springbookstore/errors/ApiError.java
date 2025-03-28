@@ -13,7 +13,7 @@ public record ApiError(
         LocalDateTime timestamp,
         Integer code,
         String status,
-        List<String> errors
+        List<String> messages
 
 ) {
 }
