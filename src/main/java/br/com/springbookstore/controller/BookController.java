@@ -5,6 +5,10 @@ import br.com.springbookstore.dto.BookDto;
 import br.com.springbookstore.mapper.BookMapper;
 import br.com.springbookstore.model.Book;
 import br.com.springbookstore.service.BookService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +30,23 @@ public class BookController {
 
     private final BookService bookService;
 
+    @Operation(
+            summary = "Criar um novo livro",
+            description = "Recurso responsável por criar um novo livro",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Criado com sucesso",
+                            content = @Content(
+                                    mediaType = "application/json", schema = @Schema(implementation = Book.class)
+                            ))
+            }
+    )
+
+    @PostMapping
+    public ResponseEntity<Book> save(@RequestBody BookDto bookDto){
+        return ResponseEntity.status(CREATED).body(bookService.saveBook(BookMapper.toBook(bookDto)));
+    }
 
     @GetMapping
     public ResponseEntity<List<Book>> findAll(){
@@ -41,10 +62,7 @@ public class BookController {
         return ResponseEntity.status(OK).body(bookOptional.get());
     }
 
-    @PostMapping
-    public ResponseEntity<Book> save(@RequestBody BookDto bookDto){
-        return ResponseEntity.status(CREATED).body(bookService.saveBook(BookMapper.toBook(bookDto)));
-    }
+
 
 
 
